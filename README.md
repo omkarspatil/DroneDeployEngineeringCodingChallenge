@@ -77,7 +77,7 @@ roll = math.degrees(math.atan2(inverserotmax[2, 1], inverserotmax[2, 2]))
 <p>Step 8.a: Draw the QR code on the XY plane at (0,0,0) in the world</p>
 <p>Step 8.b: Plot the position of the camera as a marker in the world co-ordinate system.</p>
 <p>Step 8.c: Plot the rotated axes of the camera to get a sense of the rotation in 3D.
-<img src="https://raw.githubusercontent.com/omkarspatil/DroneDeployEngineeringCodingChallenge/master/visualizations/visualIMG_6721.JPG"></img>  </p>
+<img src="https://raw.githubusercontent.com/omkarspatil/DroneDeployEngineeringCodingChallenge/master/visualizations/visualIMG_6721.png"></img>  </p>
            
 
 
