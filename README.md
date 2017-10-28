@@ -60,7 +60,15 @@ inverserotmax = np.linalg.inv(totalrotmax)
 </p>
 
 
-<p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix</p>
+<p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix
+
+```python
+yaw = math.degrees(math.atan2(inverserotmax[1, 0], inverserotmax[0, 0]))
+pitch = math.degrees(math.atan2(-1*inverserotmax[2, 0], math.sqrt(math.pow(inverserotmax[2, 1],2) + math.pow(inverserotmax[2, 2],2))))
+roll = math.degrees(math.atan2(inverserotmax[2, 1], inverserotmax[2, 2]))
+```
+
+</p>
 <p>Step 7.d : Use the 3x3 rotation matrix from the computed inverse to draw the X,Y,Z axes of the camera in
              the visualization</p>
 <p>Step 8: Generate the visualization in 3D using matplotlib</p>
