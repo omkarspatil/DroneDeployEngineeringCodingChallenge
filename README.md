@@ -8,12 +8,10 @@ This zip file https://www.dropbox.com/s/g67dmolq79ko4jk/Camera%20Localization.zi
 You can assume that the pattern is at 0,0,0 in some global coordinate system and are thus looking for the x, y, z and yaw, pitch, roll of the camera that took each image. Please submit a link to a Github repository contain the code for your solution. Readability and comments are taken into account too. You may use 3rd party libraries like OpenCV and Numpy.
 
 <b> The approach used to solve the problem </b>
-Step 0   : Read the input image in grayscale using OpenCV<br/>
-Step 1   : Runny OpenCV's Canny edge detection on the input image.<br/>
-Step 2   : Run OpenCV's findContours to get all the contours and the contour hierarchy.<br/>
-Step 3   : Find all the contours that are 4 sided polygons and if such a contour is found check if it encloses 5 or <br/>
-           more contours as its children. This technique works as we know that the position markers of a QR code is a square<br/>
-           with 5 concentric squares(each border contributes to one square).<br/>
-Step 3.a : Sorted all such contours(possible position markers) found by the area of the contour. We know that the QR code was<br/>
-           printed on a white paper and we want to exclude the contour of the paper and any other polygons from being selected<br/> 
-           as a position marker. We can do this by selecting the smallest 3 contours by area as our final position markers.<br/>
+<p>Step 0   : Read the input image in grayscale using OpenCV</p>
+<p>Step 1   : Runny OpenCV's Canny edge detection on the input image.</p>
+<p>Step 2   : Run OpenCV's findContours to get all the contours and the contour hierarchy.</p>
+<p>Step 3   : Find all the contours that are 4 sided polygons and if such a contour is found check if it encloses 5 or 
+           more contours as its children. This technique works as we know that the position markers of a QR code is a square
+           with 5 concentric squares(each border contributes to one square).</p>
+<p>Step 3.a : Sorted all such contours(possible position markers) found by the area of the contour. We know that the QR code was printed on a white paper and we want to exclude the contour of the paper and any other polygons from being selected as a position marker. We can do this by selecting the smallest 3 contours by area as our final position markers.</p>
