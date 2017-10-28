@@ -29,17 +29,19 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
             corner C : BOTTOM LEFT corner 
             corner D : BOTTOM RIGHT corner(derived from A,B and C)</p>
             
-<p>Step 5: Use the 4 corners identified to frind a 4-point perspective transform using OpenCV's solvePNP.</p>
+<p>Step 5: Use the 4 corners identified to find a 4-point perspective transform using OpenCV's solvePNP.</p>
 <p>Step 5.a: Put the camera pixel co-ordinates of the corners w.r.t to the original image in a numpy array.</p>
 <p>Step 5.b: Put the known 3D co-ordinates(world coordinates) of these points in a numpy array</p>
 <p>Step 5.c: Use the iPhone 6's calibration matrix and distortion co-efficient matrix for OpenCV.
-           Available here : <add link></p>
+           Available here : https://stackoverflow.com/questions/14680944/create-opencv-camera-matrix-for-iphone-5-solvepnp</p>
 <p>Step 5.d : Run the solvePNP method using flag cv2.SOLVEPNP_ITERATIVE</p>
 <p>Step 6: Project a set of X,Y,Z axes on the QR code in the original image to check if the rotation and translation
             vectors are fairly accurate. Also draw them on the original image.</p>
 <p>Step 7: Obtain a 3x3 rotation matrix from the 3 euler angles in the rotation vector returned from the solvePNP function
            Reference: https://www.chiefdelphi.com/forums/showthread.php?threadid=158739</p>
-<p> Step 7.a : We form a 4x4 transformation matrix using homogenous coordinates</p>
+<p> Step 7.a : We form a 4x4 transformation matrix using homogenous coordinates
+<img src="https://www.cc.gatech.edu/~hays/compvision2016/results/proj3/html/agartia3/ProjectionMatrix.jpg"></img></p>
+
 <p>Step 7.b : The previous step's matrix is the transformation matrix from world coordinates (centered on the target) to camera coordinates. (Centered on the camera) We need a matrix that transforms from camera coordinates to world. 
 We hence compute the inverse of that matrix.</p>
 <p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix</p>
