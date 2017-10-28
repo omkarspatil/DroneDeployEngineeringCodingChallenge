@@ -8,7 +8,7 @@ This zip file https://www.dropbox.com/s/g67dmolq79ko4jk/Camera%20Localization.zi
 You can assume that the pattern is at 0,0,0 in some global coordinate system and are thus looking for the x, y, z and yaw, pitch, roll of the camera that took each image. Please submit a link to a Github repository contain the code for your solution. Readability and comments are taken into account too. You may use 3rd party libraries like OpenCV and Numpy.
 
 <b> The approach used to solve the problem </b>
-<p>Step 0   : Read the input image in grayscale using OpenCV</p>
+<p>Step 0  : Read the input image in grayscale using OpenCV</p>
 <p>Step 1   : Runny OpenCV's Canny edge detection on the input image.</p>
 <p>Step 2   : Run OpenCV's findContours to get all the contours and the contour hierarchy.</p>
 <p>Step 3   : Find all the contours that are 4 sided polygons and if such a contour is found check if it encloses 5 or 
