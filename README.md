@@ -46,11 +46,6 @@ We hence compute the inverse of that matrix.
 </p>
 
 ```python
-s = "Python syntax highlighting"
-print s
-```
-
-```python
 ZYX, jac = cv2.Rodrigues(rotation_vector)
 totalrotmax = np.array([[ZYX[0, 0], ZYX[0, 1], ZYX[0, 2], translation_vector[0]],
                         [ZYX[1, 0], ZYX[1, 1], ZYX[1, 2], translation_vector[1]],
