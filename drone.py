@@ -7,11 +7,14 @@ from matplotlib.patches import PathPatch, Rectangle
 import mpl_toolkits.mplot3d.art3d as art3d
 
 
-#Define possible QR code orientations that one can encounter in an image
+'''Define possible QR code orientations that one can encounter in an image'''
 CV_QR_NORTH = 0
 CV_QR_EAST = 1
 CV_QR_SOUTH = 2
 CV_QR_WEST = 3
+
+'''Given real world dimension of the QR code in cm.'''
+QR_CODE_WORLD_SIZE=8.8
 
 def main(input_image_paths):
     '''Allowed numpy to print complete arrays in the console to ease debugging'''
@@ -204,10 +207,10 @@ def main(input_image_paths):
 
             '''Step 5.b: Put the known 3D co-ordinates(world coordinates) of these points in a numpy array'''
             model_points = np.array([
-                (0.0, 8.8, 0.0),  # Nose tip
-                (8.8, 8.8, 0.0),  # Chin
+                (0.0, QR_CODE_WORLD_SIZE, 0.0),  # Nose tip
+                (QR_CODE_WORLD_SIZE, QR_CODE_WORLD_SIZE, 0.0),  # Chin
                 (0.0, 0.0, 0.0),  # Left eye left corner
-                (8.8, 0.0, 0.0),  # Right eye right corne
+                (QR_CODE_WORLD_SIZE, 0.0, 0.0),  # Right eye right corne
             ])
 
             '''Step 5.c: Use the iPhone 6's calibration matrix and distortion co-efficient matrix for OpenCV.
@@ -233,12 +236,12 @@ def main(input_image_paths):
 
             '''Step 6: Project a set of X,Y,Z axes on the QR code in the original image to check if the rotation and translation
             vectors are fairly accurate. Also draw them on the original image.'''
-            (zAxis, jacobian)=cv2.projectPoints(np.array([(0.0, 0.0, 17.6)]), rotation_vector, translation_vector, camera_matrix,
+            (zAxis, jacobian)=cv2.projectPoints(np.array([(0.0, 0.0, QR_CODE_WORLD_SIZE*2)]), rotation_vector, translation_vector, camera_matrix,
                               dist)
-            (yAxis, jacobian) = cv2.projectPoints(np.array([(0.0, 17.6, 0.0)]), rotation_vector, translation_vector,
+            (yAxis, jacobian) = cv2.projectPoints(np.array([(0.0, QR_CODE_WORLD_SIZE*2, 0.0)]), rotation_vector, translation_vector,
                                                   camera_matrix,
                                                   dist)
-            (xAxis, jacobian) = cv2.projectPoints(np.array([(17.6, 0.0, 0.0)]), rotation_vector, translation_vector,
+            (xAxis, jacobian) = cv2.projectPoints(np.array([(QR_CODE_WORLD_SIZE*2, 0.0, 0.0)]), rotation_vector, translation_vector,
                                                   camera_matrix,
                                                   dist)
 
@@ -278,7 +281,7 @@ def main(input_image_paths):
             cameraPosition = -np.matrix(ZYX).T * np.matrix(translation_vector)
             print 'Camera is located at(world co-ordinates) : '+str(cameraPosition)
             camfordist = np.array(cameraPosition).ravel()
-            abs_distance = cvDistance3D((4.4,4.4,0),(camfordist[0],camfordist[1],camfordist[2]))
+            abs_distance = cvDistance3D((QR_CODE_WORLD_SIZE/float(2),QR_CODE_WORLD_SIZE/float(2),0),(camfordist[0],camfordist[1],camfordist[2]))
             print 'Camera\'s distance from pattern:' + str(abs_distance) + "cm"
 
             '''Step 7.d : Use the 3x3 rotation matrix from the computed inverse to draw the X,Y,Z axes of the camera in
@@ -302,13 +305,13 @@ def main(input_image_paths):
             ax1 = fig.add_subplot(111, projection='3d')
 
             '''Step 8.a: Draw the QR code on the XY plane at (0,0,0) in the world'''
-            p = Rectangle((0, 0), 8.8, 8.8, angle=0.0,fill=True)
+            p = Rectangle((0, 0), QR_CODE_WORLD_SIZE, QR_CODE_WORLD_SIZE, angle=0.0,fill=True)
             ax1.add_patch(p)
             art3d.pathpatch_2d_to_3d(p, z=0, zdir="z")
             ax1.text(0, 0, 0, "C");
-            ax1.text(8.8, 0, 0, "D");
-            ax1.text(8.8, 8.8, 0, "B");
-            ax1.text(0, 8.8, 0, "A");
+            ax1.text(QR_CODE_WORLD_SIZE, 0, 0, "D");
+            ax1.text(QR_CODE_WORLD_SIZE, QR_CODE_WORLD_SIZE, 0, "B");
+            ax1.text(0, QR_CODE_WORLD_SIZE, 0, "A");
 
 
             '''Step 8.b: Plot the position of the camera as a marker in the world co-ordinate system.'''
@@ -340,8 +343,8 @@ def main(input_image_paths):
             ax1.plot(VecStart_x_Zaxis + VecEnd_x__Xaxis, VecStart_y_Zaxis + VecEnd_y__Xaxis,
                      VecStart_z_Zaxis + VecEnd_z__Xaxis,color="red")
 
-            center_x = [4.4]
-            center_y = [4.4]
+            center_x = [QR_CODE_WORLD_SIZE/float(2)]
+            center_y = [QR_CODE_WORLD_SIZE/float(2)]
             center_z = [0]
 
             xZ = [cameraPosition[0]]
@@ -357,9 +360,9 @@ def main(input_image_paths):
             plt.legend(loc='best')
             #plt.show()
 
-            plt.savefig('visual'+imgpath.split(".")[0]+".png")
-            cv2.imwrite("output" + imgpath, mask)
-            cv2.imwrite("output_corners" + imgpath, imgOuput)
+            plt.savefig('visualizations/visual'+imgpath.split(".")[0].split("test_images/")[1]+".png")
+            cv2.imwrite("markers/output" + imgpath.split("test_images/")[1], mask)
+            cv2.imwrite("corners_and_axes/output_corners" +imgpath.split("test_images/")[1], imgOuput)
 
 def getParallelogram4th(cornerB,cornerC,cornerA):
      '''Gets the fourth point of a parallelogram given 3 points'''
@@ -462,5 +465,5 @@ def set_axes_equal(ax):
     ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 
 if __name__ == "__main__":
-    images = ['IMG_6719.JPG','IMG_6720.JPG','IMG_6721.JPG','IMG_6722.JPG','IMG_6723.JPG','IMG_6724.JPG','IMG_6725.JPG','IMG_6726.JPG','IMG_6727.JPG']
+    images = ['test_images/IMG_6721.JPG','test_images/IMG_6722.JPG','test_images/IMG_6723.JPG','test_images/IMG_6724.JPG','test_images/IMG_6725.JPG','test_images/IMG_6726.JPG','test_images/IMG_6727.JPG']
     main(images)
