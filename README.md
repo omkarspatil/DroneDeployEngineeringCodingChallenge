@@ -18,7 +18,7 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
 
 <p>Step 3.a : This is an optional step only for verification purposes. It draws the 3 identified position markers
              of the QR code(We add all children of the 3 contours too for completeness)</p>
-<img src=""></img>
+
 
 <p>Step 3.d :Determine the orientation of the QR code based on the distance of the outlier(top marker) from the line joining the other two markers and the slope of this line.(The orientation allows us to differentiate the bottom position marker from the right position marker.)</p>
 
@@ -36,7 +36,9 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
            Available here : https://stackoverflow.com/questions/14680944/create-opencv-camera-matrix-for-iphone-5-solvepnp</p>
 <p>Step 5.d : Run the solvePNP method using flag cv2.SOLVEPNP_ITERATIVE</p>
 <p>Step 6: Project a set of X,Y,Z axes on the QR code in the original image to check if the rotation and translation
-            vectors are fairly accurate. Also draw them on the original image.</p>
+            vectors are fairly accurate. Also draw them on the original image.
+<img src="https://raw.githubusercontent.com/omkarspatil/DroneDeployEngineeringCodingChallenge/master/corners_and_axes/output_cornersIMG_6723.JPG"></img>           
+</p>
 <p>Step 7: Obtain a 3x3 rotation matrix from the 3 euler angles in the rotation vector returned from the solvePNP function
            Reference: https://www.chiefdelphi.com/forums/showthread.php?threadid=158739</p>
 <p> Step 7.a : We form a 4x4 transformation matrix to transform from the camera coordinates to the world coordinates using the rotation and translation vector returned by solvePNP using the following relations:
