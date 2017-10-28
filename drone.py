@@ -6,7 +6,8 @@ from matplotlib import pyplot as plt
 from matplotlib.patches import PathPatch, Rectangle
 import mpl_toolkits.mplot3d.art3d as art3d
 
-
+'''Author : Omkar Patil 
+   Email  : patilo@purdue.edu '''
 '''Define possible QR code orientations that one can encounter in an image'''
 CV_QR_NORTH = 0
 CV_QR_EAST = 1
@@ -73,7 +74,6 @@ def main(input_image_paths):
                     new_list.append(cnts2[heir2[0][current_contour][2]])
                     current_contour = heir2[0][current_contour][2]
 
-            print img.shape
             mask = np.zeros(img.shape, dtype="uint8")
             cv2.drawContours(mask, new_list, -1, (255), 2)
 
@@ -119,7 +119,7 @@ def main(input_image_paths):
 
             top = outlier
 
-            '''Determine the orientation of the QR code based on the distance of the outlier(top marker) from the line joining the
+            '''Step 3.d :Determine the orientation of the QR code based on the distance of the outlier(top marker) from the line joining the
              other two markers and the slope of this line.'''
             dist = cvLineEquation(mc[median1], mc[median2], mc[outlier])
             (slope,align) = cvLineSlope(mc[median1], mc[median2])
@@ -152,10 +152,6 @@ def main(input_image_paths):
                 orientation = CV_QR_WEST
 
             print "Orientation of QR code is " +str(orientation)
-
-            '''temp=bottom
-            bottom=right
-            right=temp'''
 
             '''Step 4: Get the farthest corners of each marker from the center of the QRCode. Mark these corners as three corners of
             the QR code.
@@ -214,9 +210,9 @@ def main(input_image_paths):
             ])
 
             '''Step 5.c: Use the iPhone 6's calibration matrix and distortion co-efficient matrix for OpenCV.
-             Available here : <add link>'''
-            cx = 1668.87585
-            cy = 1226.19712
+             Available here : https://stackoverflow.com/questions/14680944/create-opencv-camera-matrix-for-iphone-5-solvepnp'''
+            cx = img.shape[0]/float(2)
+            cy = img.shape[1]/float(2)
             fx = 3288.47697
             fy = 3078.59787
             dist = np.array([-7.416752e-02, 1.562157e+00, 1.236471e-03, 1.237955e-03, - 5.378571e+00], dtype="double")
@@ -295,9 +291,7 @@ def main(input_image_paths):
             axesObjX = np.dot(inverserot,np.matrix([10,0,0]).T)
             axesObjY = np.dot(inverserot,np.matrix([0,10,0]).T)
 
-            #print axesObjZ
-            #print axesObjX
-            #print axesObjY
+
 
 
             '''Step 8: Generate the visualization in 3D using matplotlib'''
@@ -322,6 +316,8 @@ def main(input_image_paths):
             VecStart_x_Zaxis = [cameraPosition[0]]
             VecStart_y_Zaxis = [cameraPosition[1]]
             VecStart_z_Zaxis = [cameraPosition[2]]
+
+
             VecEnd_x__Zaxis = [axesObjZ[0] + cameraPosition[0]]
             VecEnd_y__Zaxis = [axesObjZ[1] + cameraPosition[1]]
             VecEnd_z__Zaxis = [axesObjZ[2] + cameraPosition[2]]
@@ -355,7 +351,7 @@ def main(input_image_paths):
             +str(abs_distance)+"cm \n Yaw: "+ str(round(yaw,2)) + "deg" + " Pitch: "+str(round(pitch,2)) +"deg" + " Roll : "+str(round(roll,2))+"deg")
 
             '''Use a function to scale all i.e X,Y,Z equally in matplotlib
-            Refer to : <add link>'''
+            Refer to : https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to'''
             set_axes_equal(ax1)
             plt.legend(loc='best')
             #plt.show()
