@@ -44,17 +44,19 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
 <p>Step 7.b : The previous step's matrix is the transformation matrix from world coordinates (centered on the target) to camera coordinates. (Centered on the camera) We need a matrix that transforms from camera coordinates to world. 
 We hence compute the inverse of that matrix.
 </p>
-<p>
+
 ```python
 s = "Python syntax highlighting"
 print s
 ```
-`ZYX, jac = cv2.Rodrigues(rotation_vector)
+
+```python
+ZYX, jac = cv2.Rodrigues(rotation_vector)
 totalrotmax = np.array([[ZYX[0, 0], ZYX[0, 1], ZYX[0, 2], translation_vector[0]],
                         [ZYX[1, 0], ZYX[1, 1], ZYX[1, 2], translation_vector[1]],
                         [ZYX[2, 0], ZYX[2, 1], ZYX[2, 2], translation_vector[2]],
-                        [0, 0, 0, 1]])`
-</p>
+                        [0, 0, 0, 1]])
+```
 <p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix</p>
 <p>Step 7.d : Use the 3x3 rotation matrix from the computed inverse to draw the X,Y,Z axes of the camera in
              the visualization</p>
