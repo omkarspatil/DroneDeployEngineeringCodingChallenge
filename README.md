@@ -45,7 +45,7 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
 We hence compute the inverse of that matrix.
 </p>
 <p>
-`python ZYX, jac = cv2.Rodrigues(rotation_vector)
+`ZYX, jac = cv2.Rodrigues(rotation_vector)
 totalrotmax = np.array([[ZYX[0, 0], ZYX[0, 1], ZYX[0, 2], translation_vector[0]],
                         [ZYX[1, 0], ZYX[1, 1], ZYX[1, 2], translation_vector[1]],
                         [ZYX[2, 0], ZYX[2, 1], ZYX[2, 2], translation_vector[2]],
