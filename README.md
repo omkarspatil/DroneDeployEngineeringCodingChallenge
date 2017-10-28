@@ -14,4 +14,43 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
 <p>Step 3   : Find all the contours that are 4 sided polygons and if such a contour is found check if it encloses 5 or 
            more contours as its children. This technique works as we know that the position markers of a QR code is a square
            with 5 concentric squares(each border contributes to one square).</p>
-<p>Step 3.a : Sorted all such contours(possible position markers) found by the area of the contour. We know that the QR code was printed on a white paper and we want to exclude the contour of the paper and any other polygons from being selected as a position marker. We can do this by selecting the smallest 3 contours by area as our final position markers.</p>
+<p>Also sorted all such contours(possible position markers) found by the area of the contour. We know that the QR code was printed on a white paper and we want to exclude the contour of the paper and any other polygons from being selected as a position marker. We can do this by selecting the smallest 3 contours by area as our final position markers.</p>
+
+<p>Step 3.a : This is an optional step only for verification purposes. It draws the 3 identified position markers
+             of the QR code(We add all children of the 3 contours too for completeness)</p>
+<img></img>
+
+<p>Step 3.d :Determine the orientation of the QR code based on the distance of the outlier(top marker) from the line joining the other two markers and the slope of this line.(The orientation allows us to differentiate the bottom position marker from the right position marker.)</p>
+
+<p> Step 4: Get the farthest corners of each marker from the center of the QRCode. Mark these corners as three corners of
+            the QR code.
+            corner A : TOP LEFT corner
+            corner B : TOP RIGHT corner
+            corner C : BOTTOM LEFT corner 
+            corner D : BOTTOM RIGHT corner(derived from A,B and C)</p>
+            
+<p>Step 5: Use the 4 corners identified to frind a 4-point perspective transform using OpenCV's solvePNP.</p>
+<p>Step 5.a: Put the camera pixel co-ordinates of the corners w.r.t to the original image in a numpy array.</p>
+<p>Step 5.b: Put the known 3D co-ordinates(world coordinates) of these points in a numpy array</p>
+<p>Step 5.c: Use the iPhone 6's calibration matrix and distortion co-efficient matrix for OpenCV.
+           Available here : <add link></p>
+<p>Step 5.d : Run the solvePNP method using flag cv2.SOLVEPNP_ITERATIVE</p>
+<p>Step 6: Project a set of X,Y,Z axes on the QR code in the original image to check if the rotation and translation
+            vectors are fairly accurate. Also draw them on the original image.</p>
+<p>Step 7: Obtain a 3x3 rotation matrix from the 3 euler angles in the rotation vector returned from the solvePNP function
+           Reference: https://www.chiefdelphi.com/forums/showthread.php?threadid=158739</p>
+<p> Step 7.a : We form a 4x4 transformation matrix using homogenous coordinates</p>
+<p>Step 7.b : The previous step's matrix is the transformation matrix from world coordinates (centered on the target) to camera coordinates. (Centered on the camera) We need a matrix that transforms from camera coordinates to world. 
+We hence compute the inverse of that matrix.</p>
+<p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix</p>
+<p>Step 7.d : Use the 3x3 rotation matrix from the computed inverse to draw the X,Y,Z axes of the camera in
+             the visualization</p>
+<p>Step 8: Generate the visualization in 3D using matplotlib</p>
+<p>Step 8.a: Draw the QR code on the XY plane at (0,0,0) in the world</p>
+<p>Step 8.b: Plot the position of the camera as a marker in the world co-ordinate system.</p>
+<p>Step 8.c: Plot the rotated axes of the camera to get a sense of the rotation in 3D</p>
+           
+
+
+
+    
