@@ -39,11 +39,19 @@ You can assume that the pattern is at 0,0,0 in some global coordinate system and
             vectors are fairly accurate. Also draw them on the original image.</p>
 <p>Step 7: Obtain a 3x3 rotation matrix from the 3 euler angles in the rotation vector returned from the solvePNP function
            Reference: https://www.chiefdelphi.com/forums/showthread.php?threadid=158739</p>
-<p> Step 7.a : We form a 4x4 transformation matrix using homogenous coordinates
+<p> Step 7.a : We form a 4x4 transformation matrix to transform from the camera coordinates to the world coordinates using the rotation and translation vector returned by solvePNP using the following relations:
 <img src="https://www.cc.gatech.edu/~hays/compvision2016/results/proj3/html/agartia3/ProjectionMatrix.jpg"></img></p>
 
 <p>Step 7.b : The previous step's matrix is the transformation matrix from world coordinates (centered on the target) to camera coordinates. (Centered on the camera) We need a matrix that transforms from camera coordinates to world. 
-We hence compute the inverse of that matrix.</p>
+We hence compute the inverse of that matrix.
+</p>
+<p>
+ZYX, jac = cv2.Rodrigues(rotation_vector)
+totalrotmax = np.array([[ZYX[0, 0], ZYX[0, 1], ZYX[0, 2], translation_vector[0]],
+                        [ZYX[1, 0], ZYX[1, 1], ZYX[1, 2], translation_vector[1]],
+                        [ZYX[2, 0], ZYX[2, 1], ZYX[2, 2], translation_vector[2]],
+                        [0, 0, 0, 1]])
+</p>
 <p>Step 7.c : We can now compute the yaw,pitch and roll values of the camera from the 3x3 submatrix of the above inverserotmax matrix</p>
 <p>Step 7.d : Use the 3x3 rotation matrix from the computed inverse to draw the X,Y,Z axes of the camera in
              the visualization</p>
